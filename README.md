@@ -80,7 +80,6 @@ Example relationships:
 4. Return email, first name, last name & Genre of all Rock Music listeners (Ordered alphabetically by email starting with A)
 5. Top 10 artists who have written the most Rock music
 6. Tracks longer than average song length
-7. 
 ### 🔹 Advanced
 1. Find the most profitable artist
 2. Analyze customer purchase patterns across regions

@@ -60,7 +60,7 @@ Example relationships:
 
 ### 🔴 Advanced 
 - Complex Joins & Aggregations
--  
+- Common Table Expressions(CTE's) & Windows Function
 
 ---
 

@@ -59,7 +59,6 @@ Example relationships:
 - Subqueries  
 
 ### 🔴 Advanced 
-- Complex Joins & Aggregations
 - Common Table Expressions(CTE's) & Windows Function
 
 ---
@@ -80,9 +79,11 @@ Example relationships:
 4. Return email, first name, last name & Genre of all Rock Music listeners (Ordered alphabetically by email starting with A)
 5. Top 10 artists who have written the most Rock music
 6. Tracks longer than average song length
+
 ### 🔹 Advanced
-1. Find the most profitable artist
-2. Analyze customer purchase patterns across regions
+1. What is the total amount spent by each customer? Show only customers who spent more than $40.
+2. Rank all customers by how much they've spent, from highest to lowest.
+
 
 ---
 

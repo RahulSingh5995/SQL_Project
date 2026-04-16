@@ -118,23 +118,30 @@ ORDER BY Milliseconds DESC;
 -- 🔴 ADVANCED LEVEL QUERIES
 -- =====================================================
 
--- 1. Find the most profitable artist
-SELECT ar.Name AS artist, SUM(il.UnitPrice * il.Quantity) AS revenue
-FROM InvoiceLine il
-JOIN Track t ON il.TrackId = t.TrackId
-JOIN Album al ON t.AlbumId = al.AlbumId
-JOIN Artist ar ON al.ArtistId = ar.ArtistId
-GROUP BY ar.Name
-ORDER BY revenue DESC
-LIMIT 1;
+-- 1. What is the total amount spent by each customer? Show only customers who spent more than $40.
+WITH customer_totals AS (
+    SELECT
+        c.FirstName || ' ' || c.LastName AS CustomerName,
+        SUM(i.Total) AS TotalSpent
+    FROM Customer c
+    JOIN Invoice i ON i.CustomerId = c.CustomerId
+    GROUP BY c.CustomerId
+)
+SELECT CustomerName, ROUND(TotalSpent, 2) AS TotalSpent
+FROM   customer_totals
+WHERE  TotalSpent > 40
+ORDER BY TotalSpent DESC;
 
 
--- 2. Analyze customer purchase patterns across regions
-SELECT c.Country, COUNT(i.InvoiceId) AS total_orders, SUM(i.Total) AS total_revenue
+-- 2. Rank all customers by how much they've spent, from highest to lowest.
+SELECT
+    c.FirstName || ' ' || c.LastName AS CustomerName,
+    ROUND(SUM(i.Total), 2) AS TotalSpent,
+    RANK() OVER (ORDER BY SUM(i.Total) DESC) AS SpendRank
 FROM Customer c
-JOIN Invoice i ON c.CustomerId = i.CustomerId
-GROUP BY c.Country
-ORDER BY total_revenue DESC;
+JOIN Invoice i ON i.CustomerId = c.CustomerId
+GROUP BY c.CustomerId
+ORDER BY SpendRank;
 
 
 -- =====================================================

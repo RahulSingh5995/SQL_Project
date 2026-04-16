@@ -32,12 +32,27 @@ ORDER BY Total DESC
 LIMIT 3;
 
 
+-- 4. Who is the senior most employee based on job title?
+-- (Assuming higher-level titles like 'General Manager' are senior)
+SELECT *
+FROM Employee
+ORDER BY Title DESC
+LIMIT 1;
+
+-- 5. Which city has the best customers?
+-- (City with highest total invoice revenue)
+SELECT BillingCity, SUM(Total) AS total_revenue
+FROM Invoice
+GROUP BY BillingCity
+ORDER BY total_revenue DESC
+LIMIT 1;
+
 
 -- =====================================================
 -- 🟡 MEDIUM LEVEL QUERIES
 -- =====================================================
 
--- 4. Which city generates the highest revenue?
+-- 1. Which city generates the highest revenue?
 SELECT BillingCity, SUM(Total) AS revenue
 FROM Invoice
 GROUP BY BillingCity
@@ -45,7 +60,7 @@ ORDER BY revenue DESC
 LIMIT 1;
 
 
--- 5. Who are the best customers? (Top 5 by total spending)
+-- 2. Who are the best customers? (Top 5 by total spending)
 SELECT c.CustomerId, c.FirstName, c.LastName, SUM(i.Total) AS total_spent
 FROM Customer c
 JOIN Invoice i ON c.CustomerId = i.CustomerId
@@ -54,7 +69,7 @@ ORDER BY total_spent DESC
 LIMIT 5;
 
 
--- 6. What are the most popular music genres?
+-- 3. What are the most popular music genres?
 SELECT g.Name AS genre, COUNT(il.Quantity) AS total_purchases
 FROM InvoiceLine il
 JOIN Track t ON il.TrackId = t.TrackId
@@ -62,30 +77,48 @@ JOIN Genre g ON t.GenreId = g.GenreId
 GROUP BY g.Name
 ORDER BY total_purchases DESC;
 
+-- 4. Return email, first name, last name & Genre of all Rock Music listeners
+-- Ordered alphabetically by email starting with A
+
+SELECT DISTINCT c.Email, c.FirstName, c.LastName, g.Name AS Genre
+FROM Customer c
+JOIN Invoice i ON c.CustomerId = i.CustomerId
+JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId
+JOIN Track t ON il.TrackId = t.TrackId
+JOIN Genre g ON t.GenreId = g.GenreId
+WHERE g.Name = 'Rock'
+  AND c.Email LIKE 'A%'
+ORDER BY c.Email ASC;
+
+
+-- 5. Top 10 artists who have written the most Rock music
+
+SELECT ar.Name AS artist_name, COUNT(t.TrackId) AS total_tracks
+FROM Artist ar
+JOIN Album al ON ar.ArtistId = al.ArtistId
+JOIN Track t ON al.AlbumId = t.AlbumId
+JOIN Genre g ON t.GenreId = g.GenreId
+WHERE g.Name = 'Rock'
+GROUP BY ar.Name
+ORDER BY total_tracks DESC
+LIMIT 10;
+
+
+-- 6. Tracks longer than average song length
+
+SELECT Name, Milliseconds
+FROM Track
+WHERE Milliseconds > (
+    SELECT AVG(Milliseconds) FROM Track
+)
+ORDER BY Milliseconds DESC;
 
 
 -- =====================================================
 -- 🔴 ADVANCED LEVEL QUERIES
 -- =====================================================
 
--- 7. Identify the top 10% customers based on spending
-WITH customer_spending AS (
-    SELECT c.CustomerId, SUM(i.Total) AS total_spent
-    FROM Customer c
-    JOIN Invoice i ON c.CustomerId = i.CustomerId
-    GROUP BY c.CustomerId
-),
-ranked_customers AS (
-    SELECT *,
-           NTILE(10) OVER (ORDER BY total_spent DESC) AS percentile
-    FROM customer_spending
-)
-SELECT *
-FROM ranked_customers
-WHERE percentile = 1;
-
-
--- 8. Find the most profitable artist
+-- 1. Find the most profitable artist
 SELECT ar.Name AS artist, SUM(il.UnitPrice * il.Quantity) AS revenue
 FROM InvoiceLine il
 JOIN Track t ON il.TrackId = t.TrackId
@@ -96,7 +129,7 @@ ORDER BY revenue DESC
 LIMIT 1;
 
 
--- 9. Analyze customer purchase patterns across regions
+-- 2. Analyze customer purchase patterns across regions
 SELECT c.Country, COUNT(i.InvoiceId) AS total_orders, SUM(i.Total) AS total_revenue
 FROM Customer c
 JOIN Invoice i ON c.CustomerId = i.CustomerId

@@ -58,29 +58,32 @@ Example relationships:
 - INNER JOIN  
 - Subqueries  
 
-### 🔴 Advanced
-- Common Table Expressions (CTEs)  
-- Window Functions (RANK, NTILE)  
-- Complex Joins & Nested Queries  
+### 🔴 Advanced 
+- Complex Joins & Aggregations
+-  
 
 ---
 
 ## 📈 Business Questions Answered
 
 ### 🔹 Easy
-- Who is the senior-most employee?
-- Which country has the most invoices?
-- What are the top 3 invoice totals?
+1. Who is the senior-most employee?
+2. Which country has the most invoices?
+3. What are the top 3 invoice totals?
+4. Who is the senior most employee based on job title?
+5. Which city has the best customers?
 
 ### 🔹 Medium
-- Which city generates the highest revenue?
-- Who are the best customers?
-- What are the most popular music genres?
-
+1. Which city generates the highest revenue?
+2. Who are the best customers? (Top 5 by total spending)
+3. What are the most popular music genres?
+4. Return email, first name, last name & Genre of all Rock Music listeners (Ordered alphabetically by email starting with A)
+5. Top 10 artists who have written the most Rock music
+6. Tracks longer than average song length
+7. 
 ### 🔹 Advanced
-- Identify the top 10% customers based on spending
-- Find the most profitable artist
-- Analyze customer purchase patterns across regions
+1. Find the most profitable artist
+2. Analyze customer purchase patterns across regions
 
 ---
 
